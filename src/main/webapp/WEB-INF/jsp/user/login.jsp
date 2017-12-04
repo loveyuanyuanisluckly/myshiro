@@ -127,7 +127,7 @@
         //注册
         $("#register").click(function(){
             console.log("toRegister.do");
-            window.location.href="toRegister.do";
+            window.location.href="${basePath}/user/toRegister.do";
         });
     });
 </script>

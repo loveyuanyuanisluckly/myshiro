@@ -55,7 +55,7 @@
 <script >
     jQuery(document).ready(function() {
         //验证码
-        $("#vcode").on("click",'img',function(){
+        $("#vcode").on("click",'images',function(){
             /**动态验证码，改变地址，多次在火狐浏览器下，不会变化的BUG，故这样解决*/
             var i = new Image();
             i.src = '${basePath}/user/getGifCode.do?'  + Math.random();
@@ -104,10 +104,10 @@
         });
         //跳转
         $("#login").click(function(){
-            window.location.href="toLogin.do";
+            window.location.href="${basePath}/user/toLogin.do";
         });
         $("#register").click(function(){
-            window.location.href="toRegister.do";
+            window.location.href="${basePath}/user/toRegister.do";
         });
 
 

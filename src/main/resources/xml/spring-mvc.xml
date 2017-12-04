@@ -13,7 +13,7 @@
     <mvc:annotation-driven/>
 
     <!-- 不拦截静态资源 -->
-    <mvc:resources mapping="/img/**" location="/img/" />
+    <mvc:resources mapping="/image/**" location="/image/" />
     <mvc:resources mapping="/css/**" location="/css/" />
     <mvc:resources mapping="/js/**" location="/js/" />
 

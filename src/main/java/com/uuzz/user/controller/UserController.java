@@ -86,7 +86,7 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public Map<String, Object> subRegister(HttpServletRequest request, String vcode, User user) {
+    public Map<String, Object> register(HttpServletRequest request, String vcode, User user) {
 
         Map<String, Object> result = null;
         try {
@@ -109,7 +109,7 @@ public class UserController {
             UserUtil.login(userName, userPswd);
             result.put("message", "注册成功！");
             result.put("status", 200);
-            result.put("back_url","user/index.do");
+            result.put("back_url",request.getContextPath()+"/user/index.do");
             logger.info(String.format("登陆成功！"));
         } catch (Exception e) {
             result.put("message", "系统注册发生未知异常，请尽快联系管理员！！");
