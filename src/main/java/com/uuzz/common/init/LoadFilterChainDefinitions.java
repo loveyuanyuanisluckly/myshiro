@@ -18,7 +18,7 @@ public class LoadFilterChainDefinitions {
 
     public Map<String,String> load(){
 
-        Map<String,String> definitions = new HashMap<>();
+        Map<String,String> definitions = new LinkedHashMap<>();
         InputStream in = null;
         try {
             in = this.getClass().getClassLoader().getResourceAsStream("property/base_auth.properties");
