@@ -52,7 +52,7 @@ public class UserController {
     @RequestMapping(value = "toLogin", method = RequestMethod.GET)
     public ModelAndView toLogin(HttpServletRequest request) {
 
-        return new ModelAndView("user/login");
+        return new ModelAndView("login");
     }
 
     /**
@@ -63,7 +63,7 @@ public class UserController {
     @RequestMapping(value = "toRegister", method = RequestMethod.GET)
     public ModelAndView toRegister() {
 
-        return new ModelAndView("user/register");
+        return new ModelAndView("register");
     }
 
     /**
@@ -73,7 +73,7 @@ public class UserController {
     @RequestMapping(value="index",method=RequestMethod.GET)
     public ModelAndView userIndex(){
 
-        return new ModelAndView("user/index");
+        return new ModelAndView("/view/index");
     }
 
     /**

@@ -27,7 +27,13 @@
     <param-value>3000</param-value>
   </context-param>
 
-  <!--encoding-->
+  <!--sitemesh-->
+  <filter>
+    <filter-name>sitemesh</filter-name>
+    <filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
+  </filter>
+
+  <!--encoding filter-->
   <filter>
     <filter-name>characterEncodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -50,6 +56,11 @@
       <param-value>true</param-value>
     </init-param>
   </filter>
+
+  <filter-mapping>
+    <filter-name>sitemesh</filter-name>
+    <servlet-name>spring-mvc</servlet-name>
+  </filter-mapping>
 
   <filter-mapping>
     <filter-name>characterEncodingFilter</filter-name>
@@ -93,7 +104,7 @@
   </servlet-mapping>
   
   <welcome-file-list>
-    <welcome-file>/WEB-INF/jsp/user/login.jsp</welcome-file>
+    <welcome-file>/WEB-INF/login.jsp</welcome-file>
   </welcome-file-list>
 
 </web-app>
