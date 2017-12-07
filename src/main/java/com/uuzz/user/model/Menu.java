@@ -1,5 +1,7 @@
 package com.uuzz.user.model;
 
+import static com.uuzz.user.model.Menu.State.CLOSED;
+
 /**
  * @author zj
  * @desc 菜单
@@ -8,17 +10,36 @@ package com.uuzz.user.model;
  */
 public class Menu {
 
+    public enum State{
+        CLOSED(0,"closed"),OPEN(1,"open");
+
+        private int flag;
+        private String opt;
+        State(int flag,String opt){
+            this.flag = flag;
+            this.opt = opt;
+        }
+
+        public int getFlag() {
+            return flag;
+        }
+
+        public String getOpt() {
+            return opt;
+        }
+    }
+
     // 菜单唯一标识
     private Integer id;
 
     // 父菜单id
-    private Integer parentId;
+    private Integer pid;
 
     //菜单描述
     private String text;
 
     //菜单状态（1:open,0:close）
-    private Integer state;
+    private State State = CLOSED;
 
     //菜单链接
     private String url;
@@ -31,12 +52,12 @@ public class Menu {
         this.id = id;
     }
 
-    public Integer getParentId() {
-        return parentId;
+    public Integer getPid() {
+        return pid;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 
     public String getText() {
@@ -47,12 +68,12 @@ public class Menu {
         this.text = text;
     }
 
-    public Integer getState() {
-        return state;
+    public Menu.State getState() {
+        return State;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
+    public void setState(Menu.State state) {
+        State = state;
     }
 
     public String getUrl() {

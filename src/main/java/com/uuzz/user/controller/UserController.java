@@ -1,5 +1,7 @@
 package com.uuzz.user.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.uuzz.common.Constants;
 import com.uuzz.common.util.LoggerUtil;
@@ -28,6 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
+
+import static com.uuzz.user.model.Menu.State.CLOSED;
+import static com.uuzz.user.model.Menu.State.OPEN;
 
 
 /**
@@ -258,39 +263,47 @@ public class UserController {
         }
     }
 
+    @ResponseBody
     @RequestMapping(value = "loadMenu" ,method = RequestMethod.GET)
-    public String loadMenu(){
+    public JSONArray loadMenu(){
 
-        List<Map<String,String>> nodes = new ArrayList<>();
-        for (Menu menu:getMenus()) {
-
-            Map node = new HashMap();
-            node.put("id",menu.getId());
-            node.put("text",menu.getState());
-            node.put("state",menu.getState());
-
-            List attributes = new ArrayList();
-            Map url = new HashMap();
-            url.put("url",menu.getUrl());
-            attributes.add(url);
-            node.put("attributes",attributes);
-
-            nodes.add(node);
-        }
-
-
-
-
-        return null;
+        JSONArray menus = parseMenus(0,getMenus());
+        return menus;
     }
 
+    private JSONArray parseMenus(int pid,List<Menu> menus){
+        JSONArray nodes = new JSONArray();
+        Iterator<Menu> iterator = menus.iterator();
+        while (iterator.hasNext()){
+            Menu menu = iterator.next();
+            if(menu.getPid() == pid){
+                JSONObject node = new JSONObject();
+                node.put("id",menu.getId());
+                node.put("text",menu.getText());
+                Map attributes = new HashMap();
+                attributes.put("url",menu.getUrl());
+                attributes.put("pid",pid);
+                node.put("attributes",attributes);
+                //将已经解析的数据从集合中剔除以提高效率
+                iterator.remove();
+                JSONArray children = parseMenus(menu.getId(), menus);
+                if (children.size()>0){
+                    node.put("state",menu.getState().getOpt());
+                    node.put("children", children);
+                }
+                nodes.add(node);
+            }
+        }
+        return nodes;
+    }
 
     private List<Menu> getMenus(){
         List<Menu> menus = new ArrayList<>();
+
         Menu root = new Menu();
         root.setId(1);
-        root.setParentId(0);
-        root.setState(0);
+        root.setPid(0);
+        root.setState(CLOSED);
         root.setText("菜单");
         root.setUrl("http://www.baidu.com");
         menus.add(root);
@@ -298,28 +311,29 @@ public class UserController {
 
         Menu menu = new Menu();
         menu.setId(2);
-        menu.setParentId(1);
-        menu.setState(0);
+        menu.setPid(1);
+        menu.setState(CLOSED);
         menu.setText("java");
         menu.setUrl("http://www.baidu.com");
         menus.add(menu);
 
         Menu menu1 = new Menu();
         menu1.setId(3);
-        menu1.setParentId(1);
-        menu1.setState(0);
+        menu1.setPid(1);
+        menu1.setState(CLOSED);
         menu1.setText("php");
         menu1.setUrl("http://www.baidu.com");
         menus.add(menu1);
 
         Menu menu2 = new Menu();
         menu2.setId(4);
-        menu2.setParentId(3);
-        menu2.setState(0);
+        menu2.setPid(3);
+        menu2.setState(CLOSED);
         menu2.setText("666");
         menu2.setUrl("http://www.baidu.com");
         menus.add(menu2);
 
         return menus;
     }
+
 }

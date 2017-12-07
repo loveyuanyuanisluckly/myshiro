@@ -25,9 +25,7 @@
     </div>
     <!-- 菜单-->
     <div data-options="region:'west',split:true,title:'West'" class="main-west">
-        <div class="easyui-panel" style="padding:5px">
-            <ul id="menu" class="easyui-tree" ></ul>
-        </div>
+        <ul id="menu" class="easyui-tree" ></ul>
     </div>
     <!-- 个人简介-->
     <div data-options="region:'east',split:true,collapsed:true,title:'East'" class="main-east">
