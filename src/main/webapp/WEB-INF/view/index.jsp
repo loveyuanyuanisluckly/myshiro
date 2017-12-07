@@ -11,6 +11,8 @@
     <title>内容页的标题</title>
 </head>
 <body>
-内容页的body部分
+    <div style="font-size: 12px;color: red">可以将样式包括内容渲染出来</div>
+      内容页的body部分
+    <button>提交</button>
 </body>
 </html>

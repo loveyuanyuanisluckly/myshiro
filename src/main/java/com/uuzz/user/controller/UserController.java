@@ -7,6 +7,7 @@ import com.uuzz.common.util.UserUtil;
 import com.uuzz.common.vcode.Captcha;
 import com.uuzz.common.vcode.GifCaptcha;
 import com.uuzz.common.vcode.SpecCaptcha;
+import com.uuzz.user.model.Menu;
 import com.uuzz.user.model.User;
 import com.uuzz.user.service.IUserService;
 import org.apache.log4j.Logger;
@@ -255,5 +256,70 @@ public class UserController {
         } catch (Exception e) {
             LoggerUtil.fmtError(getClass(), e, "获取验证码异常：%s", e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "loadMenu" ,method = RequestMethod.GET)
+    public String loadMenu(){
+
+        List<Map<String,String>> nodes = new ArrayList<>();
+        for (Menu menu:getMenus()) {
+
+            Map node = new HashMap();
+            node.put("id",menu.getId());
+            node.put("text",menu.getState());
+            node.put("state",menu.getState());
+
+            List attributes = new ArrayList();
+            Map url = new HashMap();
+            url.put("url",menu.getUrl());
+            attributes.add(url);
+            node.put("attributes",attributes);
+
+            nodes.add(node);
+        }
+
+
+
+
+        return null;
+    }
+
+
+    private List<Menu> getMenus(){
+        List<Menu> menus = new ArrayList<>();
+        Menu root = new Menu();
+        root.setId(1);
+        root.setParentId(0);
+        root.setState(0);
+        root.setText("菜单");
+        root.setUrl("http://www.baidu.com");
+        menus.add(root);
+
+
+        Menu menu = new Menu();
+        menu.setId(2);
+        menu.setParentId(1);
+        menu.setState(0);
+        menu.setText("java");
+        menu.setUrl("http://www.baidu.com");
+        menus.add(menu);
+
+        Menu menu1 = new Menu();
+        menu1.setId(3);
+        menu1.setParentId(1);
+        menu1.setState(0);
+        menu1.setText("php");
+        menu1.setUrl("http://www.baidu.com");
+        menus.add(menu1);
+
+        Menu menu2 = new Menu();
+        menu2.setId(4);
+        menu2.setParentId(3);
+        menu2.setState(0);
+        menu2.setText("666");
+        menu2.setUrl("http://www.baidu.com");
+        menus.add(menu2);
+
+        return menus;
     }
 }

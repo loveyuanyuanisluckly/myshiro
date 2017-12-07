@@ -44,7 +44,7 @@
     </form>
 </div>
 <!-- Javascript -->
-<script  src="${basePath}/js/common/jquery/jquery1.8.3.min.js"></script>
+<script  src="${basePath}/js/common/jquery/jquery.min.js"></script>
 <script  src="${basePath}/js/common/supersized.3.2.7.min.js"></script>
 <script  src="${basePath}/js/common/supersized-init.js"></script>
 <script  src="${basePath}/js/common/layer/layer.js"></script>

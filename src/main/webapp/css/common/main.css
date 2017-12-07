@@ -1,0 +1,21 @@
+
+div[data-options]{
+    padding: 10px;
+}
+.main-north{
+    height: 60px;
+    background-color: #B3DFDA;
+}
+.main-west{
+    width: 150px;
+}
+.main-east{
+    width: 100px;
+}
+.main-south{
+    height: 30px;
+    background-color: #A9FACD;
+}
+#title{
+    display: none;
+}
