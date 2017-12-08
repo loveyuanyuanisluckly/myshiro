@@ -28,10 +28,10 @@
   </context-param>
 
   <!--sitemesh-->
-  <filter>
+  <!--<filter>
     <filter-name>sitemesh</filter-name>
     <filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
-  </filter>
+  </filter>-->
 
   <!--encoding filter-->
   <filter>
@@ -57,10 +57,10 @@
     </init-param>
   </filter>
 
-  <filter-mapping>
+  <!--<filter-mapping>
     <filter-name>sitemesh</filter-name>
     <servlet-name>spring-mvc</servlet-name>
-  </filter-mapping>
+  </filter-mapping>-->
 
   <filter-mapping>
     <filter-name>characterEncodingFilter</filter-name>
@@ -104,7 +104,7 @@
   </servlet-mapping>
   
   <welcome-file-list>
-    <welcome-file>/WEB-INF/login.jsp</welcome-file>
+    <welcome-file>/login.jsp</welcome-file>
   </welcome-file-list>
 
 </web-app>

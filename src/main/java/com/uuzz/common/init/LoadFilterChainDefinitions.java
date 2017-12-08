@@ -5,11 +5,13 @@ package com.uuzz.common.init;
  * createTime: 2017/11/4
  */
 
-import com.uuzz.common.util.LoggerUtil;
+import com.uuzz.utils.LoggerUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 初始化加载权限与角色定义

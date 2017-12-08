@@ -14,7 +14,7 @@
         <typeAlias alias="Date" type="java.util.Date"/>
 
         <!--自定义引用类型遵循驼峰命名规则-->
-        <typeAlias alias="user" type="com.uuzz.user.model.User"/>
+        <typeAlias alias="user" type="com.uuzz.base.model.User"/>
     </typeAliases>
 
     <!--插件-->

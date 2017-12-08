@@ -18,7 +18,7 @@
                         password="root"/>
 
         <!--生成实体类位置-->
-        <javaModelGenerator targetPackage="com.uuzz.user.model"
+        <javaModelGenerator targetPackage="com.uuzz.base.user.model"
                             targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
@@ -31,7 +31,7 @@
         </sqlMapGenerator>
 
         <!--生成接口位置-->
-        <javaClientGenerator targetPackage="com.uuzz.user.dao"
+        <javaClientGenerator targetPackage="com.uuzz.base.user.dao"
                              targetProject="src/main/java" type="XMLMAPPER">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>

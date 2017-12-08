@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.uuzz.user.dao.UserMapper" >
+<mapper namespace="com.uuzz.base.dao.UserMapper" >
   <resultMap id="BaseResultMap" type="user" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
@@ -41,7 +41,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
-  <insert id="addUser" parameterType="com.uuzz.user.model.User" >
+  <insert id="addUser" parameterType="com.uuzz.base.model.User" >
     insert into tbl_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -85,7 +85,7 @@
     </trim>
   </insert>
 
-  <update id="updateUserById" parameterType="com.uuzz.user.model.User" >
+  <update id="updateUserById" parameterType="com.uuzz.base.model.User" >
     update tbl_user
     <set >
       <if test="userName != null" >

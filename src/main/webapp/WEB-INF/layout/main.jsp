@@ -36,54 +36,56 @@
         south region
     </div>
     <!-- 实际内容 -->
-    <div id="content" data-options="region:'center',title:'Center'">
-        <div id='title'><sitemesh:write property='title' /></div>
-        <sitemesh:write property='body' />
+    <div id="content" data-options="region:'center'">
     </div>
 
     <script>
         //获取标题的内容
         $(function(){
-            dynamicTitle();
-            loadTree('menu','${basePath}/user/loadMenu.do');
+            loadTree('menu','${basePath}/login/loadMenu.do');
+            gotoPage('menu','${basePath}');
         });
 
         /**
-         * 动态修改标题
+         * 点击菜单树跳转相应页面
          */
-        var dynamicTitle = function(){
-            var title = $('#title').text();
-            if(title){
-                $('#content').panel({title: title});
-            }
+        var gotoPage = function (treeId,basePath) {
+            $('#' + treeId).tree({
+                onClick: function (node) {
+                    //拦截文本节点
+                    if ((node.state == 'open') && (!node.children)) {
+                        var href = basePath + node.attributes.url;
+                        $('#content').load(href);
+                    }
+                }
+            });
         }
-
 
         /**
          * 延迟加载菜单树
          * @param treeId 展示节点id
          * @param url 请求数据地址
          */
-        var loadTree = function (treeId,url){
+        var loadTree = function (treeId, url) {
 
-            $('#'+treeId).tree({
-                url:url,
-                method:'get',
-                loadFilter:function (data,parent) {
+            $('#' + treeId).tree({
+                url: url,
+                method: 'get',
+                loadFilter: function (data, parent) {
                     var state = $.data(this, 'tree');
 
-                    function setData(){
+                    function setData() {
                         var serno = 1;
                         var todo = [];
-                        for(var i=0; i<data.length; i++){
+                        for (var i = 0; i < data.length; i++) {
                             todo.push(data[i]);
                         }
-                        while(todo.length){
+                        while (todo.length) {
                             var node = todo.shift();
-                            if (node.id == undefined){
+                            if (node.id == undefined) {
                                 node.id = '_node_' + (serno++);
                             }
-                            if (node.children){
+                            if (node.children) {
                                 node.state = 'closed';
                                 node.children1 = node.children;
                                 node.children = undefined;
@@ -92,16 +94,17 @@
                         }
                         state.tdata = data;
                     }
-                    function find(id){
+
+                    function find(id) {
                         var data = state.tdata;
                         var cc = [data];
-                        while(cc.length){
+                        while (cc.length) {
                             var c = cc.shift();
-                            for(var i=0; i<c.length; i++){
+                            for (var i = 0; i < c.length; i++) {
                                 var node = c[i];
-                                if (node.id == id){
+                                if (node.id == id) {
                                     return node;
-                                } else if (node.children1){
+                                } else if (node.children1) {
                                     cc.push(node.children1);
                                 }
                             }
@@ -113,15 +116,19 @@
 
                     var t = $(this);
                     var opts = t.tree('options');
-                    opts.onBeforeExpand = function(node){
+                    opts.onBeforeExpand = function (node) {
                         var n = find(node.id);
-                        if (n.children && n.children.length){return}
-                        if (n.children1){
+                        if (n.children && n.children.length) {
+                            return
+                        }
+                        if (n.children1) {
                             var filter = opts.loadFilter;
-                            opts.loadFilter = function(data){return data;};
-                            t.tree('append',{
-                                parent:node.target,
-                                data:n.children1
+                            opts.loadFilter = function (data) {
+                                return data;
+                            };
+                            t.tree('append', {
+                                parent: node.target,
+                                data: n.children1
                             });
                             opts.loadFilter = filter;
                             n.children = n.children1;

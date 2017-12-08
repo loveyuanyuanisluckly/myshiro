@@ -1,7 +1,7 @@
 package com.uuzz.common.init;
 
 import com.uuzz.common.Constants;
-import com.uuzz.common.util.LoggerUtil;
+import com.uuzz.utils.LoggerUtil;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
