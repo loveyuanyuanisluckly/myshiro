@@ -13,6 +13,7 @@ public class Constants {
     /*页面获取basePath标识*/
     public static final String BASE_PATH = "basePath";
 
-    /*首页路径*/
-    public static final String HOME_PAGE = "/WEB-INF/layout/main.jsp";
+    /*首页访问路径*/
+    public static final String HOME_PAGE_URL = "/login/welcome.do";
+
 }

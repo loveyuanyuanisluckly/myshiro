@@ -16,6 +16,9 @@ div[data-options]{
     height: 30px;
     background-color: #A9FACD;
 }
-#title{
-    display: none;
+#topSet{
+    width: 60px;
+    height: 26px;
+    margin-top: 20px;
+    margin-left: 88%;
 }

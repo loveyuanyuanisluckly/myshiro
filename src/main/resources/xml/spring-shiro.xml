@@ -77,12 +77,20 @@
        id 必须和 web.xml 文件中配置的 DelegatingFilterProxy 的 <filter-name> 一致.
        若不一致, 则会抛出: NoSuchBeanDefinitionException. 因为 Shiro 会来 IOC 容器中查找和 <filter-name> 名字对应的 filter bean.
     -->
+    <!--自定义过滤器 -->
+    <bean id="loginFilter" class="com.uuzz.common.LoginFilter" />
+
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
-        <property name="loginUrl" value="/login.jsp"/>
-        <property name="successUrl" value="/list.jsp"/>
+        <property name="loginUrl" value="/login/go2Login.do"/>
+        <property name="successUrl" value="/"/>
         <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
         <property name="filterChainDefinitionMap" ref="filterChainDefinitions"/>
+        <property name="filters">
+            <map>
+                <entry key="login" value-ref="loginFilter" />
+            </map>
+        </property>
     </bean>
 
     <!--通过实例工厂类初始化filterChainDefinitions-->

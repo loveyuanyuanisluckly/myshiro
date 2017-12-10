@@ -13,8 +13,8 @@
     <meta charset="utf-8" />
     <title>登录</title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
-    <link   rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link   rel="shortcut icon" href="favicon.ico" />
+    <link rel="icon" href="../favicon.ico" type="image/x-icon" />
+    <link   rel="shortcut icon" href="../favicon.ico" />
     <!-- CSS -->
     <link rel="stylesheet" href="${basePath}/css/login/reset.css"/>
     <link rel="stylesheet" href="${basePath}/css/login/supersized.css"/>
@@ -111,7 +111,7 @@
                         layer.msg('登录成功！');
                         setTimeout(function(){
                             //登录返回
-                            window.location.href= '${basePath}/'+result.back_url || "${basePath}/";
+                            window.location.href= result.back_url || "${basePath}/";
                         },1000)
                     }
                 },
@@ -126,7 +126,7 @@
         });
         //注册
         $("#register").click(function(){
-            window.location.href="${basePath}/register.jsp";
+            window.location.href="${basePath}/login/go2Register.do";
         });
     });
 </script>

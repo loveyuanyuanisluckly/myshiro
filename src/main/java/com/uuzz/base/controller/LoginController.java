@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.uuzz.base.model.Menu;
 import com.uuzz.base.model.User;
+import com.uuzz.base.service.IMenuService;
 import com.uuzz.base.service.IUserService;
 import com.uuzz.common.Constants;
 import com.uuzz.utils.LoggerUtil;
@@ -50,6 +51,18 @@ public class LoginController {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private IMenuService menuService;
+
+    @RequestMapping(value = "go2Login")
+    public String go2Login(){
+        return "login";
+    }
+
+    @RequestMapping(value = "go2Register")
+    public String go2Register(){
+        return "register";
+    }
 
     /**
      * 注册
@@ -83,7 +96,7 @@ public class LoginController {
             UserUtil.login(userName, userPswd);
             result.put("message", "注册成功！");
             result.put("status", 200);
-            result.put("back_url",request.getContextPath()+"/login/welcome.do");
+            result.put("back_url",request.getContextPath()+Constants.HOME_PAGE_URL);
             logger.info("登陆成功！");
         } catch (Exception e) {
             result.put("message", "系统注册发生未知异常，请尽快联系管理员！");
@@ -127,7 +140,7 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping(value = "login",method = RequestMethod.POST)
-    public Map<String, Object> login(@RequestParam("userName") String userName, @RequestParam("userPswd") String userPswd) {
+    public Map<String, Object> login(HttpServletRequest request,@RequestParam("userName") String userName, @RequestParam("userPswd") String userPswd) {
 
         //返回页面结果
         Map<String, Object> result = new HashMap<>();
@@ -138,7 +151,7 @@ public class LoginController {
         if (!subject.isAuthenticated()) {//没有被认证
             try {
                 UserUtil.login(userName, userPswd);
-                result.put("back_url","/login/welcome.do");
+                result.put("back_url",request.getContextPath()+Constants.HOME_PAGE_URL);
                 result.put("status", 200);
             } catch (UnknownAccountException e) {
                 result.put("message", "用户名或密码不正确！");
@@ -171,7 +184,7 @@ public class LoginController {
         if (subject != null) {
             subject.logout();
         }
-        return "redirect:/login.jsp";
+        return "forward:login/go2Login.do";
     }
 
     /**
@@ -240,8 +253,7 @@ public class LoginController {
     @ResponseBody
     @RequestMapping(value = "loadMenu" ,method = RequestMethod.GET)
     public JSONArray loadMenu(){
-
-        return parseMenus(0,getMenus());
+        return parseMenus(0,menuService.getMenus());
     }
 
     private JSONArray parseMenus(int pid,List<Menu> menus){
@@ -252,16 +264,14 @@ public class LoginController {
             if(menu.getPid() == pid){
                 JSONObject node = new JSONObject();
                 node.put("id",menu.getId());
-                node.put("text",menu.getText());
+                node.put("text",menu.getMenuName());
                 JSONObject attributes = new JSONObject();
-                attributes.put("url",menu.getUrl());
+                attributes.put("url",menu.getMenuUrl());
                 attributes.put("pid",pid);
                 node.put("attributes",attributes);
-                //将已经解析的数据从集合中剔除以提高效率
-                iterator.remove();
                 JSONArray children = parseMenus(menu.getId(), menus);
                 if (children.size()>0){
-                    node.put("state",menu.getState().getOpt());
+                    node.put("state",CLOSED.getOpt());
                     node.put("children", children);
                 }
                 nodes.add(node);
@@ -270,42 +280,4 @@ public class LoginController {
         return nodes;
     }
 
-    private List<Menu> getMenus(){
-        List<Menu> menus = new ArrayList<>();
-
-        Menu root = new Menu();
-        root.setId(1);
-        root.setPid(0);
-        root.setState(CLOSED);
-        root.setText("菜单");
-        root.setUrl("user/list.do");
-        menus.add(root);
-
-
-        Menu menu = new Menu();
-        menu.setId(2);
-        menu.setPid(1);
-        menu.setState(CLOSED);
-        menu.setText("java");
-        menu.setUrl("user/list.do");
-        menus.add(menu);
-
-        Menu menu1 = new Menu();
-        menu1.setId(3);
-        menu1.setPid(1);
-        menu1.setState(CLOSED);
-        menu1.setText("php");
-        menu1.setUrl("user/list.do");
-        menus.add(menu1);
-
-        Menu menu2 = new Menu();
-        menu2.setId(4);
-        menu2.setPid(3);
-        menu2.setState(CLOSED);
-        menu2.setText("666");
-        menu2.setUrl("user/list.do");
-        menus.add(menu2);
-
-        return menus;
-    }
 }

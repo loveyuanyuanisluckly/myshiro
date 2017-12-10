@@ -15,6 +15,7 @@
 
         <!--自定义引用类型遵循驼峰命名规则-->
         <typeAlias alias="user" type="com.uuzz.base.model.User"/>
+        <typeAlias alias="menu" type="com.uuzz.base.model.Menu"/>
     </typeAliases>
 
     <!--插件-->
@@ -52,5 +53,6 @@
     <!--sql语句-->
     <mappers>
         <mapper resource="mybatis/mapper/UserMapper.xml"/>
+        <mapper resource="mybatis/mapper/MenuMapper.xml"/>
     </mappers>
 </configuration>

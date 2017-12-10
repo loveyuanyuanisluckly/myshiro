@@ -1,7 +1,5 @@
 package com.uuzz.base.model;
 
-import static com.uuzz.base.model.Menu.State.CLOSED;
-
 /**
  * @author zj
  * @desc 菜单
@@ -35,14 +33,11 @@ public class Menu {
     // 父菜单id
     private Integer pid;
 
-    //菜单描述
-    private String text;
-
-    //菜单状态（1:open,0:close）
-    private State State = CLOSED;
+    //菜单名称
+    private String menuName;
 
     //菜单链接
-    private String url;
+    private String menuUrl;
 
     public Integer getId() {
         return id;
@@ -60,27 +55,19 @@ public class Menu {
         this.pid = pid;
     }
 
-    public String getText() {
-        return text;
+    public String getMenuName() {
+        return menuName;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setMenuName(String menuName) {
+        this.menuName = menuName;
     }
 
-    public Menu.State getState() {
-        return State;
+    public String getMenuUrl() {
+        return menuUrl;
     }
 
-    public void setState(Menu.State state) {
-        State = state;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
+    public void setMenuUrl(String menuUrl) {
+        this.menuUrl = menuUrl;
     }
 }

@@ -104,10 +104,10 @@
         });
         //跳转
         $("#login").click(function(){
-            window.location.href="${basePath}/login.jsp";
+            window.location.href="../login/welcome.do";
         });
         $("#register").click(function(){
-            window.location.href="${basePath}/register.jsp";
+            window.location.href="${basePath}/login/go2Register.do";
         });
 
 

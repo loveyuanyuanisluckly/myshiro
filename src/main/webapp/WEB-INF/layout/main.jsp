@@ -21,10 +21,16 @@
 
     <!--顶部-->
     <div data-options="region:'north',border:false" class="main-north">
-        north region
+        <div id='topSet'>
+            <a href="#" class="easyui-menubutton" data-options="menu:'#mm'">admin</a>
+            <div id="mm" style="width:100px;">
+                <div><a href="http://www.baidu.com">个人资料</a></div>
+                <div><a href="${basePath}/login/logout.do">退出登陆</a></div>
+            </div>
+        </div>
     </div>
     <!-- 菜单-->
-    <div data-options="region:'west',split:true,title:'West'" class="main-west">
+    <div data-options="region:'west',split:true,title:'菜单'" class="main-west">
         <ul id="menu" class="easyui-tree" ></ul>
     </div>
     <!-- 个人简介-->
@@ -37,6 +43,7 @@
     </div>
     <!-- 实际内容 -->
     <div id="content" data-options="region:'center'">
+
     </div>
 
     <script>
