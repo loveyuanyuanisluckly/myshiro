@@ -16,4 +16,7 @@ public class Constants {
     /*首页访问路径*/
     public static final String HOME_PAGE_URL = "/login/welcome.do";
 
+    /*超级管理员账户*/
+    public static final String ADMIN_NAME = "admin";
+
 }

@@ -5,15 +5,6 @@
 
     <!--别名-->
     <typeAliases>
-        <!--基本类型别名首字母大写-->
-        <typeAlias alias="Integer" type="java.lang.Integer" />
-        <typeAlias alias="Long" type="java.lang.Long"/>
-        <typeAlias alias="String" type="java.lang.String"/>
-        <typeAlias alias="Map" type="java.util.Map"/>
-        <typeAlias alias="List" type="java.util.List"/>
-        <typeAlias alias="Date" type="java.util.Date"/>
-
-        <!--自定义引用类型遵循驼峰命名规则-->
         <typeAlias alias="user" type="com.uuzz.base.model.User"/>
         <typeAlias alias="menu" type="com.uuzz.base.model.Menu"/>
     </typeAliases>

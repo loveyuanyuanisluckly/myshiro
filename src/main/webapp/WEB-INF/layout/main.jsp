@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="${basePath}/css/common/main.css">
     <script  src="${basePath}/js/common/jquery/jquery.min.js"></script>
     <script  src="${basePath}/js/common/jquery/jquery.easyui.min.js"></script>
+    <script  src="${basePath}/js/common/layer/layer.js"></script>
 </head>
 <body class="easyui-layout" id="layout">
 
@@ -62,11 +63,11 @@
                     //拦截文本节点
                     if ((node.state == 'open') && (!node.children)) {
                         var href = basePath + node.attributes.url;
-                        $('#content').load(href);
+                        $('#content').panel('refresh',href);
                     }
                 }
             });
-        }
+        };
 
         /**
          * 延迟加载菜单树
@@ -144,7 +145,7 @@
                     return data;
                 }
             });
-        }
+        };
     </script>
 </body>
 </html>

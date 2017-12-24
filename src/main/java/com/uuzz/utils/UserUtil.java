@@ -4,6 +4,9 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.SimpleHash;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * 针对用户信息工具
  * @author zj
@@ -32,6 +35,22 @@ public class UserUtil {
     public static void login(String userName,String userPswd){
         UsernamePasswordToken token = new UsernamePasswordToken(userName,userPswd);
         SecurityUtils.getSubject().login(token);
+    }
+
+    /**
+     * 校验邮箱是否合法
+     * @param string
+     * @return
+     */
+    public static boolean isEmail(String string) {
+        if (string == null)
+            return false;
+        String regEx1 = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        Pattern p;
+        Matcher m;
+        p = Pattern.compile(regEx1);
+        m = p.matcher(string);
+        return m.matches();
     }
 
     public static void main(String[] args) {

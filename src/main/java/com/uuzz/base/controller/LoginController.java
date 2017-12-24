@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.uuzz.base.model.Menu;
 import com.uuzz.base.model.User;
+import com.uuzz.base.model.UserEnum;
 import com.uuzz.base.service.IMenuService;
 import com.uuzz.base.service.IUserService;
 import com.uuzz.common.Constants;
+import com.uuzz.common.Message;
 import com.uuzz.utils.LoggerUtil;
 import com.uuzz.utils.UserUtil;
 import com.uuzz.utils.vcode.Captcha;
@@ -18,7 +20,6 @@ import org.apache.shiro.authc.ConcurrentAccessException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,10 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 
 import static com.uuzz.base.model.Menu.State.CLOSED;
 
@@ -73,36 +77,25 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public Map<String, Object> register(HttpServletRequest request, String vcode, User user) {
-
-        Map<String, Object> result = null;
+    public Message<Integer, String> register(HttpServletRequest request, String vcode, User user) {
         try {
-            result = new HashMap<>();
-            result.put("status", 400);
 
-            if (validateRegisteInfo(request, vcode, user, result)) return result;
+            Message<Integer, String> msg = validateRegisteInfo(request, vcode, user);
+            if(msg.state != 0)return msg;
 
-            Date date = new Date();
-            user.setCreateTime(date);
-            user.setLastLoginTime(date);
-            String userPswd = user.getUserPswd();
-            String userName = user.getUserName();
-            SimpleHash md5Pswd = UserUtil.encryptedPswd("MD5", userPswd, userName, 1024);
-            //把密码md5
-            user.setUserPswd(md5Pswd.toString());
+            //添加用户信息
+            user.setLastLoginTime(new Date());
             userService.addUser(user);
             logger.info(String.format("注册成功，注册信息：%s", JSONObject.toJSON(user)));
 
-            UserUtil.login(userName, userPswd);
-            result.put("message", "注册成功！");
-            result.put("status", 200);
-            result.put("back_url",request.getContextPath()+Constants.HOME_PAGE_URL);
+            //登陆
+            UserUtil.login(user.getUserName(), user.getUserPswd());
             logger.info("登陆成功！");
+            return new Message(200,"注册成功");
         } catch (Exception e) {
-            result.put("message", "系统注册发生未知异常，请尽快联系管理员！");
             logger.error("账号注册时发生未知异常！", e);
+            return new Message(500,"系统注册发生未知异常，请尽快联系管理员！");
         }
-        return result;
     }
 
     /**
@@ -110,24 +103,17 @@ public class LoginController {
      * @param request 请求对象
      * @param vcode 验证码
      * @param user 用户信息
-     * @param result 返回结果
      * @return boolean
      */
-    private boolean validateRegisteInfo(HttpServletRequest request, String vcode, User user, Map<String, Object> result) {
+    private Message<Integer,String> validateRegisteInfo(HttpServletRequest request, String vcode, User user) {
+
         String rgisterCode = (String)request.getSession().getAttribute(Constants.VERIFY_CODE);
         logger.debug(String.format("注册验证码：%s",rgisterCode));
         if (!Objects.equals(rgisterCode, vcode)) {
-            result.put("message", "验证码不正确！");
-            return true;
+            new Message(UserEnum.YZM_IS_ERROR.getCode(),UserEnum.YZM_IS_ERROR.getMsg());
         }
-        String email = user.getUserEmail();
-        userService.findUserByEmail(email);
-        User userDb = userService.findUserByEmail(email);
-        if (null != userDb) {
-            result.put("message", "帐号|Email已经存在！");
-            return true;
-        }
-        return false;
+        UserEnum userEnum = userService.checkUserInfo(user);
+        return  new Message(userEnum.getCode(),userEnum.getMsg());
     }
 
 
@@ -140,37 +126,34 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping(value = "login",method = RequestMethod.POST)
-    public Map<String, Object> login(HttpServletRequest request,@RequestParam("userName") String userName, @RequestParam("userPswd") String userPswd) {
+    public Message<Integer,String> login(HttpServletRequest request,@RequestParam("userName") String userName, @RequestParam("userPswd") String userPswd) {
 
         //返回页面结果
-        Map<String, Object> result = new HashMap<>();
-        result.put("status", 400);
-
-        Subject subject = SecurityUtils.getSubject();
-
-        if (!subject.isAuthenticated()) {//没有被认证
-            try {
+        Message<Integer,String> msg;
+        try {
+            Subject subject = SecurityUtils.getSubject();
+            subject.isAuthenticated();
+            if(!subject.isAuthenticated()){
                 UserUtil.login(userName, userPswd);
-                result.put("back_url",request.getContextPath()+Constants.HOME_PAGE_URL);
-                result.put("status", 200);
-            } catch (UnknownAccountException e) {
-                result.put("message", "用户名或密码不正确！");
-                logger.info(String.format("%s 账号不存在或密码有误！", userName));
-            } catch (LockedAccountException e) {
-                result.put("message", "您的账户被锁定！");
-                logger.warn(String.format("%s 账号被锁定！", userName));
-            } catch (DisabledAccountException e) {
-                result.put("message", "您的账户被禁用！");
-                logger.warn(String.format("%s 账号被禁用！", userName));
-            } catch (ConcurrentAccessException e) {
-                result.put("message", "您的账户在其它地方已登陆！");
-                logger.warn(String.format("%s 账号异地已登陆！", userName));
-            } catch (Exception e) {
-                result.put("message", "系统登陆发生未知异常，请尽快联系管理员！！");
-                logger.error(String.format("%s 账号在登陆时发生未知异常！", userName), e);
             }
+            msg = new Message<>(200,"登陆成功！");
+        } catch (UnknownAccountException e) {
+            msg =  new Message<>(400,"用户名或密码不正确！");
+            logger.info(String.format("%s 账号不存在或密码有误！", userName));
+        } catch (LockedAccountException e) {
+            msg =  new Message<>(400,"您的账户被锁定！");
+            logger.warn(String.format("%s 账号被锁定！", userName));
+        } catch (DisabledAccountException e) {
+            msg =  new Message<>(400,"您的账户被禁用！");
+            logger.warn(String.format("%s 账号被禁用！", userName));
+        } catch (ConcurrentAccessException e) {
+            msg =  new Message<>(400,"您的账户在其它地方已登陆！");
+            logger.warn(String.format("%s 账号异地已登陆！", userName));
+        } catch (Exception e) {
+            msg =  new Message<>(400,"系统登陆发生未知异常，请尽快联系管理员！！");
+            logger.error(String.format("%s 账号在登陆时发生未知异常！", userName), e);
         }
-        return result;
+        return msg;
     }
 
     /**

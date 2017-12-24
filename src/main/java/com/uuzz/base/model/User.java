@@ -1,5 +1,7 @@
 package com.uuzz.base.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -22,9 +24,11 @@ public class User {
     private String userEmail;
 
     /*创建时间*/
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /*最后一次登陆时间*/
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastLoginTime;
 
     public Integer getId() {

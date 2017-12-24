@@ -15,10 +15,17 @@
   </sql>
 
   <select id="queryUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
+    SELECT
     <include refid="Base_Column_List" />
-    from tbl_user
-    where id = #{id,jdbcType=INTEGER}
+    FROM tbl_user
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="findUserByName" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM tbl_user
+    WHERE user_name = #{userName,jdbcType=VARCHAR}
   </select>
 
   <select id="queryUserByNameAndPswd" resultMap="BaseResultMap">
@@ -26,10 +33,10 @@
     <include refid="Base_Column_List"/>
     FROM tbl_user
     WHERE user_name = #{userName,jdbcType=VARCHAR}
-      AND user_pswd = #{userPswd,jdbcType=VARCHAR}
+    AND user_pswd = #{userPswd,jdbcType=VARCHAR}
   </select>
 
-  <select id="findUserByEmail" resultMap="BaseResultMap" parameterType="String">
+  <select id="findUserByEmail" resultMap="BaseResultMap" parameterType="java.lang.String">
     SELECT
     <include refid="Base_Column_List"/>
     FROM tbl_user
@@ -37,12 +44,12 @@
   </select>
 
   <delete id="deleteUserById" parameterType="java.lang.Integer" >
-    delete from tbl_user
-    where id = #{id,jdbcType=INTEGER}
+    DELETE FROM tbl_user
+    WHERE id = #{id,jdbcType=INTEGER}
   </delete>
 
-  <insert id="addUser" parameterType="com.uuzz.base.model.User" >
-    insert into tbl_user
+  <insert id="addUser" parameterType="user" >
+    INSERT INTO tbl_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -85,8 +92,8 @@
     </trim>
   </insert>
 
-  <update id="updateUserById" parameterType="com.uuzz.base.model.User" >
-    update tbl_user
+  <update id="updateUserById" parameterType="user" >
+    UPDATE tbl_user
     <set >
       <if test="userName != null" >
         user_name = #{userName,jdbcType=VARCHAR},
@@ -104,7 +111,38 @@
         last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    WHERE id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="queryUsers" resultMap="BaseResultMap" parameterType="user">
+    SELECT <include refid="Base_Column_List"/>
+    FROM tbl_user
+    <trim prefix="WHERE" prefixOverrides="AND" suffixOverrides=",">
+      <if test="userName != null and userName != ''" >
+        AND user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPswd != null and userPswd!= ''" >
+        AND user_pswd = #{userPswd,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null and userEmail != ''" >
+        AND user_email = #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null and createTime != ''" >
+        AND create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastLoginTime != null and lastLoginTime != ''" >
+        AND last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </select>
+
+  <delete id="deleteUsersbyIds" parameterType="java.util.List">
+    DELETE
+    FROM tbl_user
+    WHERE id IN
+    <foreach collection="ids" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
 
 </mapper>

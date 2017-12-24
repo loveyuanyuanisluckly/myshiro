@@ -103,15 +103,14 @@
                 },
                 success:function(result){
                     layer.close(load);
-                    if(result && result.status != 200){
-                        layer.msg(result.message,function(){});
+                    if(result && result.state != 200){
+                        layer.msg(result.msg,function(){});
                         $('.password').val('');
                         return;
                     }else{
                         layer.msg('登录成功！');
                         setTimeout(function(){
-                            //登录返回
-                            window.location.href= result.back_url || "${basePath}/";
+                            window.location.href= "${basePath}/login/welcome.do";
                         },1000)
                     }
                 },

@@ -1,6 +1,11 @@
 package com.uuzz.base.service;
 
 import com.uuzz.base.model.User;
+import com.uuzz.base.model.UserEnum;
+import com.uuzz.common.Message;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户服务
@@ -16,6 +21,13 @@ public interface IUserService {
      * @return
      */
     User queryUserByNameAndPswd(String userName, String userPswd);
+
+    /**
+     * 通过登陆账号查询用户信息
+     * @param userName
+     * @return
+     */
+    User findUserByName(String userName);
 
     /**
      * 通过id更新用户信息
@@ -35,5 +47,31 @@ public interface IUserService {
      * @param user
      */
     void addUser(User user);
+
+    /**
+     * 查询用户信息
+     * @return
+     */
+    List<User> queryUsers(User user);
+
+    /**
+     * 通过id查询用户信息
+     * @param id
+     * @return
+     */
+    User findUserById(Integer id);
+
+    /**
+     * 校验用户名与注册邮箱
+     * @param user 用户
+     * @return
+     */
+    UserEnum checkUserInfo(User user);
+
+    /**
+     * 通过id批量删除用户信息
+     * @param ids
+     */
+    void deleteUsersbyIds(int[] ids);
 
 }

@@ -3,6 +3,8 @@ package com.uuzz.base.dao;
 import com.uuzz.base.model.User;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface UserMapper {
 
     /**
@@ -36,6 +38,13 @@ public interface UserMapper {
     /**
      * 通过用户名与密码查询用户信息
      * @param userName
+     * @return
+     */
+    User findUserByName(@Param("userName") String userName);
+
+    /**
+     * 通过用户名与密码查询用户信息
+     * @param userName
      * @param userPswd
      * @return
      */
@@ -47,4 +56,16 @@ public interface UserMapper {
      * @return
      */
     User findUserByEmail(@Param("email") String email);
+
+    /**
+     * 查询用户信息
+     * @return
+     */
+    List<User> queryUsers(User user);
+
+    /**
+     * 通过id批量删除用户信息
+     * @param ids
+     */
+    void deleteUsersbyIds(@Param("ids") int[] ids);
 }

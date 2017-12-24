@@ -90,11 +90,11 @@
             var load = layer.load();
             $.post("${basePath}/login/register.do",$("#_form").serialize() ,function(result){
                 layer.close(load);
-                if(result && result.status!= 200){
-                    return layer.msg(result.message,function(){}),!1;
+                if(result && result.state!= 200){
+                    return layer.msg(result.msg,function(){}),!1;
                 }else{
                     layer.msg('注册成功！' );
-                    window.location.href= result.back_url || "${basePath}/";
+                    window.location.href= "${basePath}/login/welcome.do";
                 }
             },"json");
 
@@ -104,7 +104,7 @@
         });
         //跳转
         $("#login").click(function(){
-            window.location.href="../login/welcome.do";
+            window.location.href="${basePath}/login/go2Login.do";
         });
         $("#register").click(function(){
             window.location.href="${basePath}/login/go2Register.do";
